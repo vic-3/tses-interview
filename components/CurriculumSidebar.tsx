@@ -85,19 +85,14 @@ export default function CurriculumSidebar({
                   <div className="ml-4 mb-3 space-y-1">
                     {section.lessons.map((lesson) => {
                       const isCompleted = lessonsState[lesson.id]?.isCompleted || false;
-                      const LessonComponent = lesson.href ? Link : 'button';
-                      const lessonProps = lesson.href ? { href: lesson.href } : {};
+                      const className = `w-full flex items-center gap-2 py-2 px-2 text-left rounded-lg text-sm transition-colors ${
+                        lesson.isActive
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`;
 
-                      return (
-                        <LessonComponent
-                          key={lesson.id}
-                          {...lessonProps}
-                          className={`w-full flex items-center gap-2 py-2 px-2 text-left rounded-lg text-sm transition-colors ${
-                            lesson.isActive
-                              ? 'bg-blue-50 text-blue-600'
-                              : 'text-gray-700 hover:bg-gray-50'
-                          }`}
-                        >
+                      const content = (
+                        <>
                           {isCompleted ? (
                             <Check
                               size={14}
@@ -112,7 +107,24 @@ export default function CurriculumSidebar({
                             />
                           )}
                           <span className="flex-1">{lesson.title}</span>
-                        </LessonComponent>
+                        </>
+                      );
+
+                      return lesson.href ? (
+                        <Link
+                          key={lesson.id}
+                          href={lesson.href}
+                          className={className}
+                        >
+                          {content}
+                        </Link>
+                      ) : (
+                        <button
+                          key={lesson.id}
+                          className={className}
+                        >
+                          {content}
+                        </button>
                       );
                     })}
                   </div>
